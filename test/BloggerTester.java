@@ -37,4 +37,24 @@ public class BloggerTester {
                 .extract().response();
         System.out.println(response.asString());
     }
+
+    @Test
+    public void getBlogPost()
+    {
+        //https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
+
+        String postId = "1018378491826793697";
+        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+
+        Response response =
+                given()
+                        .param("key", apiKey)
+                        .when()
+                        .get()
+                        .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .extract().response();
+        System.out.println(response.asString());
+    }
 }
