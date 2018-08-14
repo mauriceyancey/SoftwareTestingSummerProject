@@ -240,8 +240,8 @@ public class BloggerTester {
         try {
             GoogleTokenResponse response =
                     //new GoogleAuthorizationCodeTokenRequest(new NetHttpTransport(), new JacksonFactory(), "{client_secret}",
-                     //       "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7", "https://oauth2-login-demo.appspot.com/code")
-                      //      .execute();
+                    //       "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7", "https://oauth2-login-demo.appspot.com/code")
+                    //      .execute();
                     new GoogleAuthorizationCodeTokenRequest(new NetHttpTransport(), new JacksonFactory(), client_id,
                             client_secret, "code", "https://oauth2-login-demo.appspot.com/code").execute();
             return response.getAccessToken();
@@ -260,6 +260,7 @@ public class BloggerTester {
             }
         }
         return "";
+    }
 
     @Test
     public void getUserBlogs()
