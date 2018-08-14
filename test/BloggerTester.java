@@ -3,12 +3,15 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeToken
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
@@ -27,7 +30,7 @@ public class BloggerTester {
     String username = "softtesteew382c@gmail.com";
     String password = "hLP8B%F5oYU8kEM";
 
-    String access_token = "ya29.Glv2BbBCnKYnn6GTtwGTC8IM8Ddw08Of7gukVa1g87OI7bP1Ma9p2NVxxUl4TpNroK0aqSybHqKAELaS1rfn16fP9BrVChxOIv-mgPsvGq0HIHn8yWGwlZL9X6mv";
+    String access_token = "ya29.Glv5BTvWnApeoBb_R5bzjF49JDEyBWSEabp19LoucogklcBRdtUuPVx5UbQ4-F_Q8H8iYDgRYrd3ln03jN0iMEUAFiQuYSVNiH6mkrLY82haa9CgJmTq1SqVHFxf";
 
     //GET https://www.googleapis.com/blogger/v3/blogs/54850391780151973?key=AIzaSyDhurflllMQlg80YJZoC9EKG3qmvkxwKBY
 
@@ -52,8 +55,10 @@ public class BloggerTester {
     public void getBlogPost()
     {
         //https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
+        //https://www.googleapis.com/blogger/v3/blogs/54850391780151973/posts/5223310518537267936
 
-        String postId = "5032169774910920020";
+
+        String postId = "5223310518537267936";
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
 
         Response response =
@@ -80,32 +85,84 @@ public class BloggerTester {
     @Test public void addBlogPost() throws IOException {
         RestAssured.baseURI = baseURI + blogID + "/posts/";
 
-        String json = "{\n" +
+       /* String json = "{\n" +
                 " \"kind\": \"blogger#post\",\n" +
                 " \"blog\": {\n" +
                 "  \"id\": \"54850391780151973\"\n" +
                 " },\n" +
                 " \"title\": \"test\",\n" +
                 " \"content\": \"some test\",\n" +
-                "}";
+                "}";*/
+
+
+        Map<String, String> blog = new HashMap<>();
+        blog.put("id","54850391780151973");
+
+        Map<String, String> content = new HashMap<>();
+        content.put("kind", "blogger#post");
+        content.put("blog", blog.toString());
+        content.put("title", "some title2");
+        content.put("content", "some test content2");
+        Gson gson = new Gson();
+        String json = gson.toJson(content);
+
+        //String token = authenticateUser(username, password);
+       /* given()
+                .auth()
+                .oauth2(access_token)
+                .contentType("application/json")
+                .body(json)
+                .when()
+                .post()
+                .then()
+                .assertThat()
+                .statusCode(200);*/
 
         Response response =
                 given()
                         .auth()
                         .oauth2(access_token)
-                        //.param("key", apiKey)
-                        //.param("access_token", access_token)
-                        .param("kind", "blogger#post")
-                        //.param("content_type", "application/json")
-                        .param("title", "some random title")
-                        .param("content", "test content 2")
                         .contentType("application/json")
-                        .content(json)
+                        .body(json)
                         .when()
                         .post()
                         .then()
-                        //.assertThat()
-                        //.statusCode(200)
+                        .assertThat()
+                        .statusCode(200)
+                        .extract().response();
+        System.out.println(response.asString());
+    }
+
+    @Test public void updateBlogPost() throws IOException {
+        String postId = "6777269951563715084";
+
+        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+
+        Map<String, String> blog = new HashMap<>();
+        blog.put("id","54850391780151973");
+
+        Map<String, String> content = new HashMap<>();
+        content.put("kind", "blogger#post");
+        content.put("id", postId);
+        content.put("blog", blog.toString());
+        content.put("url", "https://utsummersoftwaretesting.blogspot.com/2018/08/some-title2.html");
+        content.put("selflink", "https://www.googleapis.com/blogger/v3/blogs/54850391780151973/posts/6777269951563715084");
+        content.put("title", "some title2");
+        content.put("content", "some updated content");
+        Gson gson = new Gson();
+        String json = gson.toJson(content);
+
+        Response response =
+                given()
+                        .auth()
+                        .oauth2(access_token)
+                        .contentType("application/json")
+                        .body(json)
+                        .when()
+                        .put()
+                        .then()
+                        .assertThat()
+                        .statusCode(200)
                         .extract().response();
         System.out.println(response.asString());
     }
@@ -117,14 +174,14 @@ public class BloggerTester {
 
         //String accessToken = authenticateUser(username, password);
         //String accessToken = requestAccessToken();
-        String postId = "566850703217322142";
+        String postId = "7717003079704783155";
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
 
                 given()
-                        .param("key", apiKey)
-                        .param("access_token", access_token)
-                        //.auth()
-                        //.oauth2("client_id")
+                        //.param("key", apiKey)
+                        //.param("access_token", access_token)
+                        .auth()
+                        .oauth2(access_token)
                         .when()
                         .delete()
                         .then()
@@ -145,7 +202,7 @@ public class BloggerTester {
 // client_id=886460868094-fmvs3vvo0ocdgsto1thf5ochuq2aa3jc.apps.googleusercontent.com&
 // client_secret=ihxw3iNTZWc-s7kUrTSREFDK
 
-        String code = "4/OABthcap_rWi0jt3KSYhkM-RrOE1JtLxJ0llsyRyi-tw5obJqs2m0G5iGiUBGUsRkXmlxMqBt2vHyp1KIlKKQvU";
+        String code = "4/OwD6k8kHgQxc_UfONQql3VQCXGOVpNcsKJ5Fb_-dAmd9Ii2v0GtRObfo0NYdLK6ue90pQEDPPORfprUQSLLrXgI";
 
         String response =
                 given()
@@ -168,8 +225,8 @@ public class BloggerTester {
 
         JsonPath jsonPath = new JsonPath(response);
         System.out.println(response);
-        String accessToken = jsonPath.getString("access_token");
-        return accessToken;
+        access_token = jsonPath.getString("access_token");
+        return access_token;
     }
 
     String requestAccessToken() throws IOException {
