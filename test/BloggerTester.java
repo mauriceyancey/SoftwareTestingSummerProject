@@ -6,6 +6,10 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
+import AuthClient.OAuth2Client;
+import AuthClient.OAuth2ClientCredentials;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Test;
 
@@ -31,6 +35,7 @@ public class BloggerTester {
     String password = "hLP8B%F5oYU8kEM";
 
     String access_token = "ya29.Glv5BTvWnApeoBb_R5bzjF49JDEyBWSEabp19LoucogklcBRdtUuPVx5UbQ4-F_Q8H8iYDgRYrd3ln03jN0iMEUAFiQuYSVNiH6mkrLY82haa9CgJmTq1SqVHFxf";
+    final String SCOPE = "https://www.googleapis.com/auth/blogger";
 
     //GET https://www.googleapis.com/blogger/v3/blogs/54850391780151973?key=AIzaSyDhurflllMQlg80YJZoC9EKG3qmvkxwKBY
 
@@ -255,5 +260,22 @@ public class BloggerTester {
             }
         }
         return "";
+
+    @Test
+    public void getUserBlogs()
+    {
+        OAuth2Client.authorize();
+
+        RestAssured.baseURI = "https://www.googleapis.com/blogger/v3/users/self/blogs";
+        Response response =
+                given()
+                    .auth().oauth2(OAuth2ClientCredentials.AccessToken)
+                    .contentType(ContentType.JSON)
+                .expect()
+                    .log().all()
+                    .statusCode(200)
+                    .when()
+                .get().then().extract().response();
+        System.out.println(response.toString());
     }
 }
