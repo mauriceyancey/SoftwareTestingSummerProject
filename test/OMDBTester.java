@@ -1,5 +1,5 @@
 import io.restassured.RestAssured;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
 

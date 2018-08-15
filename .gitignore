@@ -1,1 +1,7 @@
-*.xml
+/.idea/libraries
+/.idea
+/target
+/.idea/workspace.xml
+
+# Stored tokens
+credentials.token
