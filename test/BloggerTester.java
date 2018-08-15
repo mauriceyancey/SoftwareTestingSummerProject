@@ -8,7 +8,6 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.Test;
 
@@ -31,11 +30,10 @@ public class BloggerTester {
     String baseURI = "https://www.googleapis.com/blogger/v3/blogs/";
     String baseUserURI = "https://www.googleapis.com/blogger/v3/users/";
     String apiKey = "AIzaSyDhurflllMQlg80YJZoC9EKG3qmvkxwKBY";
-    String blogID = "54850391780151973";
+    String blogID = "54850391780151973/";
     String username = "softtesteew382c@gmail.com";
     String password = "hLP8B%F5oYU8kEM";
-
-    String access_token = "ya29.Glv5BTvWnApeoBb_R5bzjF49JDEyBWSEabp19LoucogklcBRdtUuPVx5UbQ4-F_Q8H8iYDgRYrd3ln03jN0iMEUAFiQuYSVNiH6mkrLY82haa9CgJmTq1SqVHFxf";
+    String access_token = "ya29.Glv6BXFJjPFCo_6EkcKYNXbb9zRfBWjp5hCkZij4pzKiykpwHX0ndNej_aEEDQaYuZE_1RMUJx_EGAlI8BK5z6pe2vHxct0uMb8TZLfVVmzMobTOxMvBOa1GZIrP";
     final String SCOPE = "https://www.googleapis.com/auth/blogger";
 
     //GET https://www.googleapis.com/blogger/v3/blogs/54850391780151973?key=AIzaSyDhurflllMQlg80YJZoC9EKG3qmvkxwKBY
@@ -58,7 +56,7 @@ public class BloggerTester {
      */
 
     @Test
-    public void getBlog()
+    public void getBlogID()
     {
         RestAssured.baseURI = baseURI;
                 given()
@@ -91,9 +89,9 @@ public class BloggerTester {
     }
 
     @Test
-    public void getBlogPost()
+    public void getBlogPostByID()
     {
-        String postId = "5223310518537267936";
+        String postId = "2531873676053629141";
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
 
         given()
@@ -104,15 +102,14 @@ public class BloggerTester {
                 .assertThat()
                 .statusCode(200)
                 .body("id", equalTo(postId));
+        System.out.println();
     }
 
     @Test
     public void getBlogPostResponse()
     {
-        //https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
-        //https://www.googleapis.com/blogger/v3/blogs/54850391780151973/posts/5223310518537267936
 
-        String postId = "5223310518537267936";
+        String postId = "2531873676053629141";
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
 
         Response response =
@@ -128,9 +125,9 @@ public class BloggerTester {
     }
 
     @Test
-    public void createBlog()
+    public void createBlogPost()
     {
-        RestAssured.baseURI = baseURI + blogID + "/posts/";
+        RestAssured.baseURI = baseURI + blogID + "posts/";
 
         Map<String, String> blog = new HashMap<>();
         blog.put("id","54850391780151973");
@@ -143,22 +140,97 @@ public class BloggerTester {
         Gson gson = new Gson();
         String json = gson.toJson(content);
 
+        String jsonBody = "{\n" +
+                " \"kind\": \"blogger#post\",\n" +
+                " \"blog\": {\n" +
+                "  \"id\": \"54850391780151973\"\n" +
+                " },\n" +
+                " \"title\": \"Reese Test2\",\n" +
+                " \"content\": \"Some additional test content to fill up the post\"\n" +
+                "}";
+
         given()
                 .auth()
                 .oauth2(access_token)
+//                .param("key", apiKey)
                 .contentType("application/json")
-                .body(json)
+                .body(jsonBody)
+                .when()
+                .post()
+                .then()
+                .assertThat()
+                .statusCode(200);
+    }
+
+    @Test
+    public void deleteBlogPost()
+    {
+        /**
+         * Does not behave as Google documentation indicates
+         * Actually returns a 204 instead of 200
+         */
+
+        String postIDToDelete = "5168987739335210222";
+        RestAssured.baseURI = baseURI + blogID + "posts/" + postIDToDelete;
+
+        given()
+                .auth()
+                .oauth2(access_token)
+                .when()
+                .delete()
+                .then()
+                .assertThat()
+                .statusCode(200);
+    }
+
+    @Test
+    public void updateBlogPost()
+    {
+        String postId = "2531873676053629141";
+        RestAssured.baseURI = baseURI + blogID + "posts/2531873676053629141";
+
+        Map<String, String> content = new HashMap<>();
+        content.put("content", "Updating this post just a bit");
+        Gson gson = new Gson();
+        String json = gson.toJson(content);
+
+        String jsonBody = "{\n" +
+                " \"content\": \"Updating this post a bit\"\n" +
+                "}";
+
+        given()
+                .auth()
+                .oauth2(access_token)
+//                .param("key", apiKey)
+                .contentType("application/json")
+                .body(jsonBody)
                 .when()
                 .post()
                 .then()
                 .assertThat()
                 .statusCode(200);
 
-
-
-
-
     }
+
+
+    @Test
+    public void getBlogPostBySearch()
+    {
+        RestAssured.baseURI = baseURI + blogID + "posts/search";
+
+        given()
+                .queryParam("q", "Reese Test")
+                .param("key", apiKey)
+//                .auth()
+//                .oauth2(access_token)
+                .when()
+                .get()
+                .then()
+                .assertThat()
+                .statusCode(200);
+    }
+
+
 
     @Test public void addBlogPost() throws IOException {
         RestAssured.baseURI = baseURI + blogID + "/posts/";
@@ -211,101 +283,101 @@ public class BloggerTester {
         System.out.println(response.asString());
     }
 
-    @Test public void updateBlogPost() throws IOException {
-        String postId = "6777269951563715084";
+//    @Test public void updateBlogPost() throws IOException {
+//        String postId = "6777269951563715084";
+//
+//        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+//
+//        Map<String, String> blog = new HashMap<>();
+//        blog.put("id","54850391780151973");
+//
+//        Map<String, String> content = new HashMap<>();
+//        content.put("kind", "blogger#post");
+//        content.put("id", postId);
+//        content.put("blog", blog.toString());
+//        content.put("url", "https://utsummersoftwaretesting.blogspot.com/2018/08/some-title2.html");
+//        content.put("selflink", "https://www.googleapis.com/blogger/v3/blogs/54850391780151973/posts/6777269951563715084");
+//        content.put("title", "some title2");
+//        content.put("content", "some updated content");
+//        Gson gson = new Gson();
+//        String json = gson.toJson(content);
+//
+//        Response response =
+//                given()
+//                        .auth()
+//                        .oauth2(access_token)
+//                        .contentType("application/json")
+//                        .body(json)
+//                        .when()
+//                        .put()
+//                        .then()
+//                        .assertThat()
+//                        .statusCode(200)
+//                        .extract().response();
+//        System.out.println(response.asString());
+//    }
 
-        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
 
-        Map<String, String> blog = new HashMap<>();
-        blog.put("id","54850391780151973");
-
-        Map<String, String> content = new HashMap<>();
-        content.put("kind", "blogger#post");
-        content.put("id", postId);
-        content.put("blog", blog.toString());
-        content.put("url", "https://utsummersoftwaretesting.blogspot.com/2018/08/some-title2.html");
-        content.put("selflink", "https://www.googleapis.com/blogger/v3/blogs/54850391780151973/posts/6777269951563715084");
-        content.put("title", "some title2");
-        content.put("content", "some updated content");
-        Gson gson = new Gson();
-        String json = gson.toJson(content);
-
-        Response response =
-                given()
-                        .auth()
-                        .oauth2(access_token)
-                        .contentType("application/json")
-                        .body(json)
-                        .when()
-                        .put()
-                        .then()
-                        .assertThat()
-                        .statusCode(200)
-                        .extract().response();
-        System.out.println(response.asString());
-    }
-
-
-    @Test
-    public void deleteBlogPost() throws IOException {
-        //https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
-
-        //String accessToken = authenticateUser(username, password);
-        //String accessToken = requestAccessToken();
-        String postId = "7717003079704783155";
-        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
-
-                given()
-                        //.param("key", apiKey)
-                        //.param("access_token", access_token)
-                        .auth()
-                        .oauth2(access_token)
-                        .when()
-                        .delete()
-                        .then()
-                        .assertThat()
-                        .statusCode(204);
-        //System.out.println(response.asString());
-    }
+//    @Test
+//    public void deleteBlogPost() throws IOException {
+//        //https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
+//
+//        //String accessToken = authenticateUser(username, password);
+//        //String accessToken = requestAccessToken();
+//        String postId = "7717003079704783155";
+//        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+//
+//                given()
+//                        //.param("key", apiKey)
+//                        //.param("access_token", access_token)
+//                        .auth()
+//                        .oauth2(access_token)
+//                        .when()
+//                        .delete()
+//                        .then()
+//                        .assertThat()
+//                        .statusCode(204);
+//        //System.out.println(response.asString());
+//    }
 
     // we need to get the oauth token before we can perform the request
-    private String authenticateUser(String username, String password) {
-
-        String loginURI = baseURI + "login";
-        RestAssured.baseURI =  "https://accounts.google.com/o/oauth2/token";
-
-//https://accounts.google.com/o/oauth2/token?
-// grant_type=authorization_code&
-// code=4/NgA0wYsUx_1B1MITmatqR7BZAfbTF60kmwbxb2QzexFezhNNBIVSYjnh6zRe16ZAnRlHO0-MtqzpiGRUzUQwsGI#&
-// client_id=886460868094-fmvs3vvo0ocdgsto1thf5ochuq2aa3jc.apps.googleusercontent.com&
-// client_secret=ihxw3iNTZWc-s7kUrTSREFDK
-
-        String code = "4/OwD6k8kHgQxc_UfONQql3VQCXGOVpNcsKJ5Fb_-dAmd9Ii2v0GtRObfo0NYdLK6ue90pQEDPPORfprUQSLLrXgI";
-
-        String response =
-                given()
-                        //.param("username", username)
-                        //.param("password", password)
-                        .param("grant_type", "authorization_code")
-                        .param("code", code)
-                        .param("client_id", client_id)
-//                        .param("scope", "https://www.googleapis.com/auth/blogger.readonly")
-                        //.param("scope", "https://www.googleapis.com/auth/drive")
-                        .param("client_secret", client_secret)
-                        //.param("response_type", "code")
-                        .param("redirect_uri", "http://localhost:8080")
-                        //.auth()
-                        //.preemptive()
-                        //.basic(username,password)
-                        //.when()
-                        .post()
-                        .asString();
-
-        JsonPath jsonPath = new JsonPath(response);
-        System.out.println(response);
-        access_token = jsonPath.getString("access_token");
-        return access_token;
-    }
+//    private String authenticateUser(String username, String password) {
+//
+//        String loginURI = baseURI + "login";
+//        RestAssured.baseURI =  "https://accounts.google.com/o/oauth2/token";
+//
+////https://accounts.google.com/o/oauth2/token?
+//// grant_type=authorization_code&
+//// code=4/NgA0wYsUx_1B1MITmatqR7BZAfbTF60kmwbxb2QzexFezhNNBIVSYjnh6zRe16ZAnRlHO0-MtqzpiGRUzUQwsGI#&
+//// client_id=886460868094-fmvs3vvo0ocdgsto1thf5ochuq2aa3jc.apps.googleusercontent.com&
+//// client_secret=ihxw3iNTZWc-s7kUrTSREFDK
+//
+//        String code = "4/OwD6k8kHgQxc_UfONQql3VQCXGOVpNcsKJ5Fb_-dAmd9Ii2v0GtRObfo0NYdLK6ue90pQEDPPORfprUQSLLrXgI";
+//
+//        String response =
+//                given()
+//                        //.param("username", username)
+//                        //.param("password", password)
+//                        .param("grant_type", "authorization_code")
+//                        .param("code", code)
+//                        .param("client_id", client_id)
+////                        .param("scope", "https://www.googleapis.com/auth/blogger.readonly")
+//                        //.param("scope", "https://www.googleapis.com/auth/drive")
+//                        .param("client_secret", client_secret)
+//                        //.param("response_type", "code")
+//                        .param("redirect_uri", "http://localhost:8080")
+//                        //.auth()
+//                        //.preemptive()
+//                        //.basic(username,password)
+//                        //.when()
+//                        .post()
+//                        .asString();
+//
+//        JsonPath jsonPath = new JsonPath(response);
+//        System.out.println(response);
+//        access_token = jsonPath.getString("access_token");
+//        return access_token;
+//    }
 
     String requestAccessToken() throws IOException {
 
