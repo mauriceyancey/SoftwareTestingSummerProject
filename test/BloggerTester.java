@@ -1,3 +1,5 @@
+import AuthClient.OAuth2Client;
+import AuthClient.OAuth2ClientCredentials;
 import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
@@ -5,11 +7,8 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
-import AuthClient.OAuth2Client;
-import AuthClient.OAuth2ClientCredentials;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.Test;
 
@@ -18,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 
 /**
@@ -29,6 +29,7 @@ public class BloggerTester {
     String client_secret = "ihxw3iNTZWc-s7kUrTSREFDK";
 
     String baseURI = "https://www.googleapis.com/blogger/v3/blogs/";
+    String baseUserURI = "https://www.googleapis.com/blogger/v3/users/";
     String apiKey = "AIzaSyDhurflllMQlg80YJZoC9EKG3qmvkxwKBY";
     String blogID = "54850391780151973";
     String username = "softtesteew382c@gmail.com";
@@ -39,29 +40,77 @@ public class BloggerTester {
 
     //GET https://www.googleapis.com/blogger/v3/blogs/54850391780151973?key=AIzaSyDhurflllMQlg80YJZoC9EKG3qmvkxwKBY
 
+    /**
+     * https://www.googleapis.com/blogger/v3/users/userId
+     * https://www.googleapis.com/blogger/v3/users/self
+     * https://www.googleapis.com/blogger/v3/users/userId/blogs
+     * https://www.googleapis.com/blogger/v3/users/self/blogs
+     * https://www.googleapis.com/blogger/v3/blogs/blogId
+     * https://www.googleapis.com/blogger/v3/blogs/byurl
+     * https://www.googleapis.com/blogger/v3/blogs/blogId/posts
+     * https://www.googleapis.com/blogger/v3/blogs/blogId/posts/bypath
+     * https://www.googleapis.com/blogger/v3/blogs/blogId/posts/search
+     * https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
+     * https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId/comments
+     * https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId/comments/commentId
+     * https://www.googleapis.com/blogger/v3/blogs/blogId/pages
+     * https://www.googleapis.com/blogger/v3/blogs/blogId/pages/pageId
+     */
+
     @Test
     public void getBlog()
     {
-        RestAssured.baseURI = baseURI + blogID;
+        RestAssured.baseURI = baseURI;
+                given()
+                        .param("key", apiKey)
+                        .when()
+                        .get(blogID)
+                        .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .body("id", equalTo(blogID));
+    }
+
+    @Test
+    public void getBlogIDResponse()
+    {
+        RestAssured.baseURI = baseURI;
 
         Response response =
                 given()
+                .param("key", apiKey)
+                .when()
+                .get(blogID)
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("id", equalTo(blogID))
+                .extract().response();
+        System.out.println(response.body().toString());
+
+    }
+
+    @Test
+    public void getBlogPost()
+    {
+        String postId = "5223310518537267936";
+        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+
+        given()
                 .param("key", apiKey)
                 .when()
                 .get()
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .extract().response();
-        System.out.println(response.asString());
+                .body("id", equalTo(postId));
     }
 
     @Test
-    public void getBlogPost()
+    public void getBlogPostResponse()
     {
         //https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
         //https://www.googleapis.com/blogger/v3/blogs/54850391780151973/posts/5223310518537267936
-
 
         String postId = "5223310518537267936";
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
@@ -78,14 +127,38 @@ public class BloggerTester {
         System.out.println(response.asString());
     }
 
-    /*{
-        "access_token" : "ya29.Glv2BbBCnKYnn6GTtwGTC8IM8Ddw08Of7gukVa1g87OI7bP1Ma9p2NVxxUl4TpNroK0aqSybHqKAELaS1rfn16fP9BrVChxOIv-mgPsvGq0HIHn8yWGwlZL9X6mv",
-            "expires_in" : 3600,
-            "refresh_token" : "1/gA21Mu_2qciM9-z5CP88y4PhIiSXrQDZMVyuY3BpJP8",
-            "scope" : "https://www.googleapis.com/auth/blogger",
-            "token_type" : "Bearer"
+    @Test
+    public void createBlog()
+    {
+        RestAssured.baseURI = baseURI + blogID + "/posts/";
+
+        Map<String, String> blog = new HashMap<>();
+        blog.put("id","54850391780151973");
+
+        Map<String, String> content = new HashMap<>();
+        content.put("kind", "blogger#post");
+        content.put("blog", blog.toString());
+        content.put("title", "Reese Test");
+        content.put("content", "Some test content to fill up the post");
+        Gson gson = new Gson();
+        String json = gson.toJson(content);
+
+        given()
+                .auth()
+                .oauth2(access_token)
+                .contentType("application/json")
+                .body(json)
+                .when()
+                .post()
+                .then()
+                .assertThat()
+                .statusCode(200);
+
+
+
+
+
     }
-*/
 
     @Test public void addBlogPost() throws IOException {
         RestAssured.baseURI = baseURI + blogID + "/posts/";
@@ -106,8 +179,8 @@ public class BloggerTester {
         Map<String, String> content = new HashMap<>();
         content.put("kind", "blogger#post");
         content.put("blog", blog.toString());
-        content.put("title", "some title2");
-        content.put("content", "some test content2");
+        content.put("title", "Reese Test");
+        content.put("content", "some test content to fill up the post");
         Gson gson = new Gson();
         String json = gson.toJson(content);
 
