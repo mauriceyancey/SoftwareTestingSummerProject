@@ -135,26 +135,16 @@ public class BloggerTester {
         Map<String, String> content = new HashMap<>();
         content.put("kind", "blogger#post");
         content.put("blog", blog.toString());
-        content.put("title", "Reese Test");
-        content.put("content", "Some test content to fill up the post");
+        content.put("title", "Reese Test 3");
+        content.put("content", "Using GSON to JSON");
         Gson gson = new Gson();
         String json = gson.toJson(content);
-
-        String jsonBody = "{\n" +
-                " \"kind\": \"blogger#post\",\n" +
-                " \"blog\": {\n" +
-                "  \"id\": \"54850391780151973\"\n" +
-                " },\n" +
-                " \"title\": \"Reese Test2\",\n" +
-                " \"content\": \"Some additional test content to fill up the post\"\n" +
-                "}";
 
         given()
                 .auth()
                 .oauth2(access_token)
-//                .param("key", apiKey)
                 .contentType("application/json")
-                .body(jsonBody)
+                .body(json)
                 .when()
                 .post()
                 .then()
@@ -187,29 +177,23 @@ public class BloggerTester {
     public void updateBlogPost()
     {
         String postId = "2531873676053629141";
-        RestAssured.baseURI = baseURI + blogID + "posts/2531873676053629141";
+        RestAssured.baseURI = baseURI + blogID + "posts/" + postId;
 
         Map<String, String> content = new HashMap<>();
-        content.put("content", "Updating this post just a bit");
+        content.put("content", "Updating this post even a little more");
         Gson gson = new Gson();
         String json = gson.toJson(content);
-
-        String jsonBody = "{\n" +
-                " \"content\": \"Updating this post a bit\"\n" +
-                "}";
 
         given()
                 .auth()
                 .oauth2(access_token)
-//                .param("key", apiKey)
                 .contentType("application/json")
-                .body(jsonBody)
+                .body(json)
                 .when()
-                .post()
+                .put()
                 .then()
                 .assertThat()
                 .statusCode(200);
-
     }
 
 
