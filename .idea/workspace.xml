@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6443d3f9-85ac-402a-98c0-72819511ad6a" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/BloggerTester.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/BloggerTester.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -64,15 +65,20 @@
       <file leaf-file-name="BloggerTester.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/BloggerTester.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="492">
-              <caret line="156" column="26" selection-start-line="156" selection-start-column="26" selection-end-line="156" selection-end-column="26" />
+            <state relative-caret-position="1170">
+              <caret line="145" column="16" selection-start-line="145" selection-start-column="16" selection-end-line="145" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1683#3211#0" />
                 <element signature="method#getBlogID#0;class#BloggerTester#0" />
                 <element signature="method#getBlogIDResponse#0;class#BloggerTester#0" />
                 <element signature="method#getBlogPostByID#0;class#BloggerTester#0" />
                 <element signature="method#getBlogPostResponse#0;class#BloggerTester#0" />
-                <element signature="method#deletePost#0;class#BloggerTester#0" />
+                <element signature="e#4648#5880#0" />
+                <element signature="e#5853#6578#0" />
+                <element signature="e#6579#7277#0" />
+                <element signature="e#7415#7582#0" />
+                <element signature="e#7714#9441#0" />
               </folding>
             </state>
           </provider>
@@ -230,21 +236,21 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.BloggerTester.createBlogPost">
+  <component name="RunManager" selected="JUnit.BloggerTester">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
-    <configuration name="BloggerTester.createBlogPost" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BloggerTester" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SoftwareTestingSummerProject" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="BloggerTester" />
-      <option name="METHOD_NAME" value="createBlogPost" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
@@ -254,13 +260,13 @@
       </option>
       <patterns />
     </configuration>
-    <configuration name="BloggerTester.deleteBlogPost" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BloggerTester.getBlogIDResponse" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SoftwareTestingSummerProject" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="BloggerTester" />
-      <option name="METHOD_NAME" value="deleteBlogPost" />
+      <option name="METHOD_NAME" value="getBlogIDResponse" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -305,13 +311,13 @@
       </option>
       <patterns />
     </configuration>
-    <configuration name="BloggerTester.updateBlogPost" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BloggerTester.getPostComments" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SoftwareTestingSummerProject" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="BloggerTester" />
-      <option name="METHOD_NAME" value="updateBlogPost" />
+      <option name="METHOD_NAME" value="getPostComments" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -361,17 +367,17 @@
       <listeners />
     </configuration>
     <list>
-      <item itemvalue="JUnit.BloggerTester.getBlogPostByID" />
       <item itemvalue="JUnit.BloggerTester.getBlogPostResponse" />
-      <item itemvalue="JUnit.BloggerTester.deleteBlogPost" />
-      <item itemvalue="JUnit.BloggerTester.createBlogPost" />
-      <item itemvalue="JUnit.BloggerTester.updateBlogPost" />
+      <item itemvalue="JUnit.BloggerTester.getBlogPostByID" />
+      <item itemvalue="JUnit.BloggerTester.getBlogIDResponse" />
+      <item itemvalue="JUnit.BloggerTester.getPostComments" />
+      <item itemvalue="JUnit.BloggerTester" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.BloggerTester.createBlogPost" />
-        <item itemvalue="JUnit.BloggerTester.updateBlogPost" />
-        <item itemvalue="JUnit.BloggerTester.deleteBlogPost" />
+        <item itemvalue="JUnit.BloggerTester" />
+        <item itemvalue="JUnit.BloggerTester.getPostComments" />
+        <item itemvalue="JUnit.BloggerTester.getBlogIDResponse" />
         <item itemvalue="JUnit.BloggerTester.getBlogPostResponse" />
         <item itemvalue="JUnit.BloggerTester.getBlogPostByID" />
       </list>
@@ -423,44 +429,50 @@
       <option name="project" value="LOCAL" />
       <updated>1534371733954</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Got Update Blog Posts working. Also got GSON tp JSON working">
+      <created>1534372333531</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1534372333531</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="BloggerTester_deleteBlogPost - 2018.08.15 at 17h 17m 48s.xml">
-      <configuration name="BloggerTester.deleteBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getBlogIDResponse - 2018.08.15 at 17h 44m 56s.xml">
+      <configuration name="BloggerTester.getBlogIDResponse" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_createBlogPost - 2018.08.15 at 17h 19m 34s.xml">
-      <configuration name="BloggerTester.createBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getBlogPostByID - 2018.08.15 at 17h 45m 08s.xml">
+      <configuration name="BloggerTester.getBlogPostByID" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_deleteBlogPost - 2018.08.15 at 17h 20m 12s.xml">
-      <configuration name="BloggerTester.deleteBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getBlogPostResponse - 2018.08.15 at 17h 45m 19s.xml">
+      <configuration name="BloggerTester.getBlogPostResponse" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_updateBlogPost - 2018.08.15 at 17h 23m 08s.xml">
-      <configuration name="BloggerTester.updateBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getPostComments - 2018.08.15 at 17h 51m 42s.xml">
+      <configuration name="BloggerTester.getPostComments" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_updateBlogPost - 2018.08.15 at 17h 25m 40s.xml">
-      <configuration name="BloggerTester.updateBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getPostComments - 2018.08.15 at 17h 56m 44s.xml">
+      <configuration name="BloggerTester.getPostComments" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_updateBlogPost - 2018.08.15 at 17h 26m 05s.xml">
-      <configuration name="BloggerTester.updateBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getPostComments - 2018.08.15 at 17h 57m 23s.xml">
+      <configuration name="BloggerTester.getPostComments" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_updateBlogPost - 2018.08.15 at 17h 27m 52s.xml">
-      <configuration name="BloggerTester.updateBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getPostComments - 2018.08.15 at 17h 57m 39s.xml">
+      <configuration name="BloggerTester.getPostComments" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_updateBlogPost - 2018.08.15 at 17h 28m 24s.xml">
-      <configuration name="BloggerTester.updateBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getBlogIDResponse - 2018.08.15 at 17h 57m 50s.xml">
+      <configuration name="BloggerTester.getBlogIDResponse" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_updateBlogPost - 2018.08.15 at 17h 28m 53s.xml">
-      <configuration name="BloggerTester.updateBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester_getPostComments - 2018.08.15 at 17h 58m 08s.xml">
+      <configuration name="BloggerTester.getPostComments" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BloggerTester_updateBlogPost - 2018.08.15 at 17h 29m 41s.xml">
-      <configuration name="BloggerTester.updateBlogPost" configurationId="JUnit" />
+    <history-entry file="BloggerTester - 2018.08.15 at 18h 00m 12s.xml">
+      <configuration name="BloggerTester" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="5" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -534,19 +546,12 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added some test methods and cleaned up some commented code" />
     <MESSAGE value="Got Create and Delete Posts working" />
-    <option name="LAST_COMMIT_MESSAGE" value="Got Create and Delete Posts working" />
+    <MESSAGE value="Got Update Blog Posts working. Also got GSON tp JSON working" />
+    <option name="LAST_COMMIT_MESSAGE" value="Got Update Blog Posts working. Also got GSON tp JSON working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/test/BloggerTester.java</url>
-          <line>153</line>
-          <properties />
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="6" />
+      <option name="time" value="8" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -899,15 +904,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/BloggerTester.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="492">
-          <caret line="156" column="26" selection-start-line="156" selection-start-column="26" selection-end-line="156" selection-end-column="26" />
+        <state relative-caret-position="1170">
+          <caret line="145" column="16" selection-start-line="145" selection-start-column="16" selection-end-line="145" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1683#3211#0" />
             <element signature="method#getBlogID#0;class#BloggerTester#0" />
             <element signature="method#getBlogIDResponse#0;class#BloggerTester#0" />
             <element signature="method#getBlogPostByID#0;class#BloggerTester#0" />
             <element signature="method#getBlogPostResponse#0;class#BloggerTester#0" />
-            <element signature="method#deletePost#0;class#BloggerTester#0" />
+            <element signature="e#4648#5880#0" />
+            <element signature="e#5853#6578#0" />
+            <element signature="e#6579#7277#0" />
+            <element signature="e#7415#7582#0" />
+            <element signature="e#7714#9441#0" />
           </folding>
         </state>
       </provider>
