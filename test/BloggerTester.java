@@ -1,14 +1,9 @@
-import main.java.AuthClient.OAuth2Client;
-import main.java.AuthClient.OAuth2ClientCredentials;
-import com.google.api.client.auth.oauth2.TokenResponseException;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import main.java.AuthClient.OAuth2Client;
+import main.java.AuthClient.OAuth2ClientCredentials;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -184,28 +179,37 @@ public class BloggerTester {
     }
 
     @Test
-    public void updateBlogPostTitle() {
-        /**
-         * Will only update the title when using PUT
-         */
-        String postId = "2531873676053629141";
+    public void updateBlogPost() {
+
+        String postId = "5376217905243694041";
+        OAuth2Client.authorize();
+
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
 
+        // must provide both title and content with put. otherwise, the one I don't provide will be empty
+        // error prone
         Map<String, String> content = new HashMap<>();
-        content.put("content", "Updating this post");
+        content.put("title", "some title");
+        content.put("content", "updated post2");
         Gson gson = new Gson();
         String json = gson.toJson(content);
 
-        given()
+        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+
+
+        Response response =
+                given()
                 .auth()
-                .oauth2(access_token)
+                .oauth2(OAuth2ClientCredentials.AccessToken)
                 .contentType("application/json")
                 .body(json)
                 .when()
                 .put()
                 .then()
                 .assertThat()
-                .statusCode(200);
+                .statusCode(200).extract().response();
+        System.out.println(response.asString());
+
     }
 
     @Test
@@ -213,18 +217,19 @@ public class BloggerTester {
         /**
          * Will update the JSON key specified when using PATCH verb
          */
-        String postId = "2531873676053629141";
+        String postId = "5376217905243694041";
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+        OAuth2Client.authorize();
 
         Map<String, String> content = new HashMap<>();
-        content.put("content", "Patching this post even a little more");
+        content.put("content", "Patching this post");
 //        content.put("author.displayName", "Samuel L Jackson");
         Gson gson = new Gson();
         String json = gson.toJson(content);
 
         given()
                 .auth()
-                .oauth2(access_token)
+                .oauth2(OAuth2ClientCredentials.AccessToken)
                 .contentType("application/json")
                 .body(json)
                 .when()
@@ -418,33 +423,6 @@ public class BloggerTester {
 //        return access_token;
 //    }
 
-    String requestAccessToken() throws IOException {
-
-        String code = "4/NgA0wYsUx_1B1MITmatqR7BZAfbTF60kmwbxb2QzexFezhNNBIVSYjnh6zRe16ZAnRlHO0-MtqzpiGRUzUQwsGI#";
-        try {
-            GoogleTokenResponse response =
-                    //new GoogleAuthorizationCodeTokenRequest(new NetHttpTransport(), new JacksonFactory(), "{client_secret}",
-                    //       "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7", "https://oauth2-login-demo.appspot.com/code")
-                    //      .execute();
-                    new GoogleAuthorizationCodeTokenRequest(new NetHttpTransport(), new JacksonFactory(), client_id,
-                            client_secret, "code", "https://oauth2-login-demo.appspot.com/code").execute();
-            return response.getAccessToken();
-            //System.out.println("Access token: " + response.getAccessToken());
-        } catch (TokenResponseException e) {
-            if (e.getDetails() != null) {
-                System.err.println("Error: " + e.getDetails().getError());
-                if (e.getDetails().getErrorDescription() != null) {
-                    System.err.println(e.getDetails().getErrorDescription());
-                }
-                if (e.getDetails().getErrorUri() != null) {
-                    System.err.println(e.getDetails().getErrorUri());
-                }
-            } else {
-                System.err.println(e.getMessage());
-            }
-        }
-        return "";
-    }
 
 
 }
