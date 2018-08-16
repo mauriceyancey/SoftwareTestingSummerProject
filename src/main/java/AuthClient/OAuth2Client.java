@@ -1,4 +1,4 @@
-package AuthClient;
+package main.java.AuthClient;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -25,7 +25,7 @@ public class OAuth2Client {
     private static GoogleAuthorizationCodeFlow initializeFlow() throws IOException {
         return new GoogleAuthorizationCodeFlow.Builder(
                 new NetHttpTransport(), JacksonFactory.getDefaultInstance(),
-                OAuth2ClientCredentials.CLIENT_ID, OAuth2ClientCredentials.CLIENT_SECRET,
+                main.java.AuthClient.OAuth2ClientCredentials.CLIENT_ID, main.java.AuthClient.OAuth2ClientCredentials.CLIENT_SECRET,
                 Collections.singleton(SCOPE)).build();
     }
 

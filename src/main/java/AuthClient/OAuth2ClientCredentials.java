@@ -1,4 +1,4 @@
-package AuthClient;
+package main.java.AuthClient;
 
 import java.util.Map;
 
