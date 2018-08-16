@@ -1,5 +1,5 @@
-import AuthClient.OAuth2Client;
-import AuthClient.OAuth2ClientCredentials;
+import main.java.AuthClient.OAuth2Client;
+import main.java.AuthClient.OAuth2ClientCredentials;
 import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
@@ -17,7 +17,6 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-
 
 /**
  * Created by tiffanytillett on 7/31/18.
@@ -70,7 +69,7 @@ public class BloggerTester {
                         .statusCode(200)
                         .when()
                         .get().then().extract().response();
-        System.out.println(response.toString());
+        System.out.println(response.asString());
     }
 
     @Test
@@ -102,7 +101,7 @@ public class BloggerTester {
                 .statusCode(200)
                 .body("id", equalTo(blogID))
                 .extract().response();
-        System.out.println(response.body().toString());
+        System.out.println(response.body().asString());
 
     }
 
