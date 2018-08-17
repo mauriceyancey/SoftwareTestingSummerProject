@@ -1,5 +1,4 @@
 import AuthClient.OAuth2Client;
-import AuthClient.OAuth2ClientCredentials;
 import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
@@ -58,18 +57,18 @@ public class BloggerTester {
     @Test
     public void getUserBlogs()
     {
-        OAuth2Client.authorize();
-
         RestAssured.baseURI = "https://www.googleapis.com/blogger/v3/users/self/blogs";
         Response response =
                 given()
-                        .auth().oauth2(OAuth2ClientCredentials.AccessToken)
-                        .contentType(ContentType.JSON)
-                        .expect()
-                        .log().all()
-                        .statusCode(200)
-                        .when()
-                        .get().then().extract().response();
+                    .auth().oauth2(OAuth2Client.getAccessToken())
+                    .contentType(ContentType.JSON)
+                    .expect()
+                    .log().all()
+                .when()
+                    .get()
+                .then()
+                    .assertThat().statusCode(200)
+                    .extract().response();
         System.out.println(response.toString());
     }
 
@@ -77,14 +76,14 @@ public class BloggerTester {
     public void getBlogID()
     {
         RestAssured.baseURI = baseURI;
-                given()
-                        .param("key", apiKey)
-                        .when()
-                        .get(blogID)
-                        .then()
-                        .assertThat()
-                        .statusCode(200)
-                        .body("id", equalTo(blogID));
+            given()
+                    .param("key", apiKey)
+            .when()
+                    .get(blogID)
+            .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .body("id", equalTo(blogID));
     }
 
     @Test
