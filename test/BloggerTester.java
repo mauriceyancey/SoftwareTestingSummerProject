@@ -26,13 +26,14 @@ public class BloggerTester {
     String client_id = "886460868094-fmvs3vvo0ocdgsto1thf5ochuq2aa3jc.apps.googleusercontent.com";
     String client_secret = "ihxw3iNTZWc-s7kUrTSREFDK";
 
+    String bloggerURI = "https://www.googleapis.com/blogger/v3";
+
     String baseURI = "https://www.googleapis.com/blogger/v3/blogs/";
     String baseUserURI = "https://www.googleapis.com/blogger/v3/users/";
     String apiKey = "AIzaSyDhurflllMQlg80YJZoC9EKG3qmvkxwKBY";
     String blogID = "54850391780151973";
     String username = "softtesteew382c@gmail.com";
     String password = "hLP8B%F5oYU8kEM";
-    String access_token = "ya29.Glv6BXFJjPFCo_6EkcKYNXbb9zRfBWjp5hCkZij4pzKiykpwHX0ndNej_aEEDQaYuZE_1RMUJx_EGAlI8BK5z6pe2vHxct0uMb8TZLfVVmzMobTOxMvBOa1GZIrP";
     final String SCOPE = "https://www.googleapis.com/auth/blogger";
 
     //GET https://www.googleapis.com/blogger/v3/blogs/54850391780151973?key=AIzaSyDhurflllMQlg80YJZoC9EKG3qmvkxwKBY
@@ -93,14 +94,14 @@ public class BloggerTester {
 
         Response response =
                 given()
-                .param("key", apiKey)
+                    .param("key", apiKey)
                 .when()
-                .get(blogID)
+                    .get(blogID)
                 .then()
-                .assertThat()
-                .statusCode(200)
-                .body("id", equalTo(blogID))
-                .extract().response();
+                    .assertThat()
+                    .statusCode(200)
+                    .body("id", equalTo(blogID))
+                    .extract().response();
         System.out.println(response.body().toString());
 
     }
@@ -113,9 +114,9 @@ public class BloggerTester {
 
         given()
                 .param("key", apiKey)
-                .when()
+        .when()
                 .get()
-                .then()
+        .then()
                 .assertThat()
                 .statusCode(200)
                 .body("id", equalTo(postId));
@@ -132,9 +133,9 @@ public class BloggerTester {
         Response response =
                 given()
                         .param("key", apiKey)
-                        .when()
+                .when()
                         .get()
-                        .then()
+                .then()
                         .assertThat()
                         .statusCode(200)
                         .extract().response();
@@ -147,24 +148,47 @@ public class BloggerTester {
         RestAssured.baseURI = baseURI + blogID + "/posts/";
 
         Map<String, String> blog = new HashMap<>();
-        blog.put("id","54850391780151973");
+        blog.put("id", blogID);
 
         Map<String, String> content = new HashMap<>();
         content.put("kind", "blogger#post");
         content.put("blog", blog.toString());
-        content.put("title", "Reese Test 3");
+        content.put("title", "Reese Test 5");
         content.put("content", "Using GSON to JSON");
-        Gson gson = new Gson();
-        String json = gson.toJson(content);
 
         given()
                 .auth()
-                .oauth2(access_token)
-                .contentType("application/json")
-                .body(json)
-                .when()
+                .oauth2(OAuth2Client.getAccessToken())
+                .contentType(ContentType.JSON)
+                .body(content)
+        .when()
                 .post()
-                .then()
+        .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200);
+    }
+
+    @Test
+    public void updateBlogPostTitle()
+    {
+        /**
+         * Will only update the title when using PUT
+         */
+        String postId = "32602906098243800";
+        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+
+        Map<String, String> content = new HashMap<>();
+        content.put("content", "Updating this post");
+
+        given()
+                .auth()
+                .oauth2(OAuth2Client.getAccessToken())
+                .contentType(ContentType.JSON)
+                .body(content)
+        .when()
+                .put()
+        .then()
                 .assertThat()
                 .statusCode(200);
     }
@@ -177,68 +201,16 @@ public class BloggerTester {
          * Actually returns a 204 instead of 200
          */
 
-        String postIDToDelete = "5168987739335210222";
+        String postIDToDelete = "32602906098243800";
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postIDToDelete;
 
         given()
                 .auth()
-                .oauth2(access_token)
-                .when()
+                .oauth2(OAuth2Client.getAccessToken())
+                .log().all()
+        .when()
                 .delete()
-                .then()
-                .assertThat()
-                .statusCode(200);
-    }
-
-    @Test
-    public void updateBlogPostTitle()
-    {
-        /**
-         * Will only update the title when using PUT
-         */
-        String postId = "2531873676053629141";
-        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
-
-        Map<String, String> content = new HashMap<>();
-        content.put("content", "Updating this post");
-        Gson gson = new Gson();
-        String json = gson.toJson(content);
-
-        given()
-                .auth()
-                .oauth2(access_token)
-                .contentType("application/json")
-                .body(json)
-                .when()
-                .put()
-                .then()
-                .assertThat()
-                .statusCode(200);
-    }
-
-    @Test
-    public void patchBlogPost()
-    {
-        /**
-         * Will update the JSON key specified when using PATCH verb
-         */
-        String postId = "2531873676053629141";
-        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
-
-        Map<String, String> content = new HashMap<>();
-        content.put("content", "Patching this post even a little more");
-//        content.put("author.displayName", "Samuel L Jackson");
-        Gson gson = new Gson();
-        String json = gson.toJson(content);
-
-        given()
-                .auth()
-                .oauth2(access_token)
-                .contentType("application/json")
-                .body(json)
-                .when()
-                .patch()
-                .then()
+        .then()
                 .assertThat()
                 .statusCode(200);
     }
@@ -250,32 +222,82 @@ public class BloggerTester {
         RestAssured.baseURI = baseURI + blogID + "/posts/" + postId + "/comments";
 
         Response response =
-        given()
-                .auth()
-                .oauth2(access_token)
-                .contentType("application/json")
-                .when()
-                .get()
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .extract().response();
+                given()
+                        .auth()
+                        .oauth2(OAuth2Client.getAccessToken())
+                        .contentType(ContentType.JSON)
+                        .when()
+                        .get()
+                        .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .extract().response();
         System.out.println(response.asString());
     }
 
     @Test
+    public void getPostComment()
+    {
+        String postId = "1112962502129778369";
+        String commentId = "7184897017938174126";
+        RestAssured.baseURI = bloggerURI;
+
+        Response response =
+                given()
+                        .pathParam("blogID", blogID)
+                        .pathParam("postID", postId)
+                        .pathParam("commentID", commentId)
+                        .param("key", apiKey)
+                        .contentType(ContentType.JSON)
+                        .log().all()
+                .when()
+                        .get("/blogs/{blogID}/posts/{postID}/comments/{commentID}")
+                .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .extract().response();
+        System.out.println(response.asString());
+    }
+
+    @Test
+    public void patchBlogPost()
+    {
+        /**
+         * Will update the JSON key specified when using PATCH verb
+         */
+        String postId = "5376217905243694041";
+        RestAssured.baseURI = baseURI + blogID + "/posts/" + postId;
+
+        Map<String, String> content = new HashMap<>();
+        content.put("content", "Patching this post even a little more");
+
+        given()
+                .auth()
+                .oauth2(OAuth2Client.getAccessToken())
+                .contentType(ContentType.JSON)
+                .body(content)
+        .when()
+                .patch()
+        .then()
+                .assertThat()
+                .statusCode(200);
+    }
+
+
+
+    @Test
     public void getBlogPostBySearch()
     {
-        RestAssured.baseURI = baseURI + blogID + "posts/search";
+        RestAssured.baseURI = baseURI + blogID + "/posts/search";
 
         given()
                 .queryParam("q", "Reese Test")
                 .param("key", apiKey)
 //                .auth()
 //                .oauth2(access_token)
-                .when()
+        .when()
                 .get()
-                .then()
+        .then()
                 .assertThat()
                 .statusCode(200);
     }
@@ -296,7 +318,7 @@ public class BloggerTester {
 
 
         Map<String, String> blog = new HashMap<>();
-        blog.put("id","54850391780151973");
+        blog.put("id", blogID);
 
         Map<String, String> content = new HashMap<>();
         content.put("kind", "blogger#post");
@@ -321,12 +343,12 @@ public class BloggerTester {
         Response response =
                 given()
                         .auth()
-                        .oauth2(access_token)
+                        .oauth2(OAuth2Client.getAccessToken())
                         .contentType("application/json")
                         .body(json)
-                        .when()
+                .when()
                         .post()
-                        .then()
+                .then()
                         .assertThat()
                         .statusCode(200)
                         .extract().response();
